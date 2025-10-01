@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShoeStore – Premium Footwear Online</title>
+  <style>
+    html {scroll-behavior:smooth;}
+    body {margin:0;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;background:#f9f9f9;color:#333;}
+    header {background:#232f3e;color:#fff;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+    header h1 {font-size:24px;margin:0;font-weight:bold;}
+    nav a {color:#fff;margin:0 15px;text-decoration:none;font-weight:600;transition:color 0.3s;}
+    nav a:hover {color:#ffa41c;text-decoration:underline;}
+
+    section {padding:60px 20px;min-height:80vh;}
+    h2 {margin-bottom:25px;font-size:28px;background: linear-gradient(to right, #ff8c00, #ffa41c);-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
+    .stylish {font-style:italic;line-height:1.8;font-size:17px;color:#555;transition: color 0.3s;}
+    .stylish:hover {color:#232f3e;}
+
+    .products {display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;}
+    .product {background: linear-gradient(135deg, #ffffff, #f0f0f5);border-radius:12px;box-shadow:0 3px 8px rgba(0,0,0,0.1);padding:20px;transition: transform 0.3s, box-shadow 0.3s, background 0.3s;}
+    .product:hover {transform: translateY(-8px);box-shadow:0 8px 20px rgba(0,0,0,0.2);background: linear-gradient(135deg, #ffe8b2, #fff0f5);}
+    .carousel {position:relative;text-align:center;}
+    .carousel img {max-width:100%;border-radius:10px;}
+    .carousel button {position:absolute;top:50%;transform:translateY(-50%);background:#0008;color:#fff;border:none;padding:6px;cursor:pointer;border-radius:50%;}
+    .carousel button:first-of-type {left:5px;}
+    .carousel button:last-of-type {right:5px;}
+    .price {color:#b12704;font-weight:bold;margin-top:10px;font-size:18px;}
+    .rating {color:#ffa41c;font-size:14px;margin-top:5px;}
+    .add {margin-top:12px;background:#ffa41c;border:none;padding:12px;width:100%;cursor:pointer;border-radius:8px;font-weight:bold;transition: transform 0.2s, background 0.3s;}
+    .add:hover {background:#ff8c00;transform: scale(1.05);}
+
+    #cart-btn {position:fixed;bottom:25px;right:25px;background:#ffa41c;color:#000;border:none;padding:18px 22px;border-radius:50%;font-weight:bold;cursor:pointer;box-shadow:0 3px 7px rgba(0,0,0,0.3);transition: transform 0.3s;}
+    #cart-btn:hover {animation: pulse 0.6s ease-in-out;}
+    #cart-count {position:absolute;top:-5px;right:-5px;background:red;color:#fff;border-radius:50%;padding:3px 7px;font-size:12px;}
+    @keyframes pulse {0%{transform:scale(1);}50%{transform:scale(1.15);}100%{transform:scale(1);}}
+
+    .cart-item {display:flex;justify-content:space-between;align-items:center;background:#fff;margin:12px 0;padding:12px;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
+    .cart-item img {width:70px;border-radius:6px;}
+    .cart-item span {flex:1;margin-left:12px;font-weight:500;}
+    .remove-btn {background:red;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:13px;transition:background 0.3s;}
+    .remove-btn:hover {background:darkred;}
+    .cart-total {font-size:20px;font-weight:bold;margin-top:20px;text-align:right;}
+    .checkout {background:#232f3e;color:#fff;padding:12px;width:100%;border:none;border-radius:8px;cursor:pointer;margin-top:15px;font-size:16px;font-weight:bold;transition:background 0.3s;}
+    .checkout:hover {background:#37475a;}
+
+    form {background:#fff;padding:25px;max-width:450px;margin:auto;box-shadow:0 3px 10px rgba(0,0,0,0.15);border-radius:12px;}
+    form input, form button {width:100%;padding:12px;margin:12px 0;border:1px solid #ccc;border-radius:6px;font-size:15px;}
+    form button {background:#232f3e;color:#fff;border:none;font-weight:bold;cursor:pointer;transition:background 0.3s;}
+    form button:hover {background:#37475a;}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>ShoeStore</h1>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#products">Shop</a>
+    <a href="#cart">Cart</a>
+    <a href="#about">About Us</a>
+    <a href="#login">Login</a>
+    <a href="#payment">Payment</a>
+  </nav>
+</header>
+
+<section id="home">
+  <h2>Step Into Style with ShoeStore</h2>
+  <p class="stylish">
+    Discover a world where fashion meets function. At <strong>ShoeStore</strong>, every pair of shoes is curated to elevate your style, enhance comfort, and empower every step. Explore our exclusive collections of sneakers, casuals, sports, and outdoor footwear — all designed for the discerning shopper.
+  </p>
+</section>
+
+<section id="products">
+  <h2>Our Featured Shoes</h2>
+  <div class="products" id="product-list"></div>
+</section>
+
+<section id="cart">
+  <h2>Your Shopping Cart</h2>
+  <div id="cart-items"></div>
+  <div class="cart-total" id="cart-total">Total: ₹0.00</div>
+  <button class="checkout" onclick="checkout()">Proceed to Checkout</button>
+</section>
+
+<section id="about">
+  <h2>About Us</h2>
+  <p class="stylish">
+    At <strong>ShoeStore</strong>, we don’t just sell shoes — we craft experiences. Every pair in our curated collection tells a story of style, comfort, and innovation. From sleek urban sneakers to high-performance sports and elegant casuals, our mission is to elevate your every step. Designed for trendsetters, adventurers, and everyday heroes, our footwear embodies quality, durability, and unmatched flair. Step into a world where fashion meets functionality and let your journey begin with <strong>ShoeStore</strong>.
+  </p>
+</section>
+
+<section id="login">
+  <h2>Login</h2>
+  <form id="loginForm">
+    <input type="text" placeholder="Username" required>
+    <input type="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+  </form>
+</section>
+
+<section id="payment">
+  <h2>Payment</h2>
+  <form onsubmit="window.location.href='#thankyou'; return false;">
+    <input type="text" placeholder="Cardholder Name" required>
+    <input type="text" placeholder="Card Number" required>
+    <input type="text" placeholder="Expiry Date (MM/YY)" required>
+    <input type="text" placeholder="CVV" required>
+    <button type="submit">Pay Now</button>
+  </form>
+</section>
+
+<section id="thankyou">
+  <h2>Thank You!</h2>
+  <p class="stylish">Your order has been successfully placed. We’ll deliver your shoes with care and speed!</p>
+</section>
+
+<button id="cart-btn" onclick="window.location.href='#cart'">🛒 <span id="cart-count">0</span></button>
+
+<script>
+const products = [
+  { id:1,title:"Puma",brand:"Stride",price:16000.00,rating:4.5,category:"Running",images:["images/runner1.jpg","images/runner2.jpg"] },
+  { id:2,title:"Nike",brand:"Metro",price:45000.00,rating:4.2,category:"Casual",images:["images/urban1.jpg","images/urban2.jpg"] },
+  { id:3,title:"Jordan",brand:"NetPlay",price:65000.00,rating:4.8,category:"Sports",images:["images/court1.jpg","images/court2.jpg"] },
+  { id:4,title:"Converse",brand:"Summit",price:65000.00,rating:4.6,category:"Outdoor",images:["images/trail1.jpg","images/trail2.jpg"] }
+];
+
+const cart=[];
+const currentImageIndex={};
+
+function renderProducts(){
+  const container=document.getElementById('product-list');
+  container.innerHTML=products.map(p=>`
+    <div class="product">
+      <div class="carousel" id="carousel-${p.id}">
+        <img src="${p.images[0]}" alt="${p.title}">
+        <button onclick="prevImage(${p.id})">◀</button>
+        <button onclick="nextImage(${p.id})">▶</button>
+      </div>
+      <h3>${p.title}</h3>
+      <div class="price">₹${p.price.toFixed(2)}</div>
+      <div class="rating">⭐ ${p.rating}</div>
+      <button class="add" onclick="addToCart(${p.id})">Add to Cart</button>
+    </div>
+  `).join('');
+
+  products.forEach(p=>{
+    currentImageIndex[p.id]=0;
+    setInterval(()=>{ nextImage(p.id); },4000);
+  });
+}
+
+function prevImage(id){ const p=products.find(p=>p.id===id); currentImageIndex[id]--; if(currentImageIndex[id]<0)currentImageIndex[id]=p.images.length-1; document.querySelector(`#carousel-${id} img`).src=p.images[currentImageIndex[id]];}
+function nextImage(id){ const p=products.find(p=>p.id===id); currentImageIndex[id]++; if(currentImageIndex[id]>=p.images.length)currentImageIndex[id]=0; document.querySelector(`#carousel-${id} img`).src=p.images[currentImageIndex[id]];}
+
+function addToCart(id){ const product=products.find(p=>p.id===id); const item=cart.find(i=>i.id===id); if(item){item.qty++;} else {cart.push({...product,qty:1});} updateCart();}
+function removeFromCart(id){ const index=cart.findIndex(i=>i.id===id); if(index!==-1){cart.splice(index,1);updateCart();}}
+function updateCart(){ const itemsContainer=document.getElementById('cart-items'); const count=document.getElementById('cart-count'); const total=document.getElementById('cart-total'); let sum=0; itemsContainer.innerHTML=cart.map(i=>{ sum+=i.price*i.qty; return `<div class="cart-item"><img src="${i.images[0]}" alt="${i.title}"><span>${i.title} (x${i.qty})</span><span>₹${(i.price*i.qty).toFixed(2)}</span><button class="remove-btn" onclick="removeFromCart(${i.id})">❌ Remove</button></div>`}).join(''); count.innerText=cart.reduce((a,i)=>a+i.qty,0); total.innerText="Total: ₹"+sum.toFixed(2);}
+function checkout(){if(cart.length===0){alert("Your cart is empty!");return;} window.location.href="#payment";}
+document.getElementById('loginForm').addEventListener('submit', function(e){e.preventDefault(); alert("Login successful! Redirecting to Shop..."); window.location.href="#products";});
+
+renderProducts();
+updateCart();
+</script>
+
+</body>
+</html>
